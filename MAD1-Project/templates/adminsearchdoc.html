@@ -1,0 +1,32 @@
+{% extends "basic.html" %}
+{% block title %}Search Doctor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Doctor Search Results</h2>
+    <hr>
+
+    {% if results %}
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Dept</th>
+        </tr>
+
+        {% for d in results %}
+        <tr>
+            <td>{{ d[0] }}</td>
+            <td>{{ d[1] }}</td>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}
