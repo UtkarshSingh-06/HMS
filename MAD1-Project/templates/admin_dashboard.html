@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🏥 HMS Admin</a>
+            <div class="d-flex">
+                <span class="navbar-text text-white me-3">Welcome, {{ session.admin_name }}</span>
+                <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h2>Admin Dashboard</h2>
+        <hr>
+
+        <div class="row text-center mb-4">
+            <div class="col-md-4">
+                <div class="card p-4 shadow bg-primary text-white">
+                    <h4>Total Doctors</h4>
+                    <p class="display-4">{{ doctors }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-4 shadow bg-success text-white">
+                    <h4>Total Patients</h4>
+                    <p class="display-4">{{ patients }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card p-4 shadow bg-info text-white">
+                    <h4>Total Appointments</h4>
+                    <p class="display-4">{{ appointments }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <a href="/admin/add_doctor" class="btn btn-primary w-100 mb-2">➕ Add Doctor</a>
+            </div>
+            <div class="col-md-6">
+                <a href="/admin/all_appointments" class="btn btn-info w-100 mb-2">📅 View All Appointments</a>
+            </div>
+        </div>
+
+        <h3 class="mt-4">Recent Appointments</h3>
+        <table class="table table-bordered table-hover mt-2">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in appt_list[:10] %}
+                <tr>
+                    <td>{{ a[0] }}</td>
+                    <td>{{ a[1] }}</td>
+                    <td>{{ a[2] }}</td>
+                    <td>{{ a[3] }}</td>
+                    <td>{{ a[4] }}</td>
+                    <td>
+                        {% if a[5] == 'Booked' %}
+                            <span class="badge bg-primary">{{ a[5] }}</span>
+                        {% elif a[5] == 'Completed' %}
+                            <span class="badge bg-success">{{ a[5] }}</span>
+                        {% else %}
+                            <span class="badge bg-danger">{{ a[5] }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>Search Doctor</h4>
+                <form method="GET" action="/admin/search_doctor">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search by name or department">
+                        <button class="btn btn-primary" type="submit">🔍 Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h4>Search Patient</h4>
+                <form method="GET" action="/admin/search_patient">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search by name or ID">
+                        <button class="btn btn-success" type="submit">🔍 Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
